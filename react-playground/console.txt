@@ -1,0 +1,33 @@
+03:19:36.465 App.jsx:85 Parsed imports: [
+  {
+    "source": "framer-motion",
+    "specifiers": [
+      {
+        "type": "named",
+        "imported": "motion",
+        "local": "motion"
+      }
+    ]
+  },
+  {
+    "source": "react-icons/fi",
+    "specifiers": [
+      {
+        "type": "named",
+        "imported": "FiChevronLeft",
+        "local": "FiChevronLeft"
+      },
+      {
+        "type": "named",
+        "imported": "FiChevronRight",
+        "local": "FiChevronRight"
+      }
+    ]
+  }
+]
+03:19:37.532 about:srcdoc:70 Loaded imports: {motion: Proxy(Object), FiChevronLeft: ƒ, FiChevronRight: ƒ}
+03:19:37.533 about:srcdoc:71 About to decode source code...
+03:19:37.533 about:srcdoc:74 Source code decoded, length: 2682
+03:19:37.534 about:srcdoc:78 Creating function...
+03:19:37.534 about:srcdoc:80 Executing function...
+03:19:37.534 about:srcdoc:82 Component created: function
