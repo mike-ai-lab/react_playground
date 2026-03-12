@@ -1,166 +1,230 @@
-04:06:44.311 VM79 framer-motion.js:1 Uncaught TypeError: Cannot read properties of undefined (reading 'createContext')
-(anonymous) @ VM79 framer-motion.js:1
-(anonymous) @ VM79 framer-motion.js:1
-(anonymous) @ VM79 framer-motion.js:1
-PendingScript
-compileAndRender @ App.jsx:110
-script.onload @ App.jsx:77
-script
-loadBabel @ App.jsx:72
-(anonymous) @ App.jsx:89
-react_stack_bottom_frame @ react-dom-client.development.js:25989
-runWithFiberInDEV @ react-dom-client.development.js:871
-commitHookEffectListMount @ react-dom-client.development.js:13249
-commitHookPassiveMountEffects @ react-dom-client.development.js:13336
-reconnectPassiveEffects @ react-dom-client.development.js:15832
-recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:15784
-reconnectPassiveEffects @ react-dom-client.development.js:15885
-doubleInvokeEffectsOnFiber @ react-dom-client.development.js:18703
-runWithFiberInDEV @ react-dom-client.development.js:871
-recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom-client.development.js:18667
-commitDoubleInvokeEffectsInDEV @ react-dom-client.development.js:18712
-flushPassiveEffects @ react-dom-client.development.js:18439
-(anonymous) @ react-dom-client.development.js:17923
-performWorkUntilDeadline @ scheduler.development.js:45
-<App>
-exports.jsxDEV @ react-jsx-dev-runtime.development.js:335
-(anonymous) @ main.jsx:8
-04:06:44.313 App.jsx:119 Parsed imports: [
+console logs:
+
+react-dom_client.js?v=fed78328:20101 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+cdn.tailwindcss.com/:1  Failed to load resource: net::ERR_PROXY_CONNECTION_FAILED
+react.production.min.js:1  Failed to load resource: net::ERR_PROXY_CONNECTION_FAILED
+react-dom.production.min.js:218 Uncaught TypeError: Cannot read properties of undefined (reading '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED')
+    at react-dom.production.min.js:218:172
+    at react-dom.production.min.js:13:195
+    at react-dom.production.min.js:13:223
+    at react-dom.production.min.js:267:3
+(anonymous) @ react-dom.production.min.js:218
+(anonymous) @ react-dom.production.min.js:13
+(anonymous) @ react-dom.production.min.js:13
+(anonymous) @ react-dom.production.min.js:267
+
+
+
+Preview Error
+Cannot destructure property 'useState' of 'React' as it is undefined.
+
+_________
+---------
+
+the code that should render:
+import React, { useState, useEffect, useCallback } from 'react';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Maximize2, 
+  Layers, 
+  Compass, 
+  Home, 
+  ArrowUpRight 
+} from 'lucide-react';
+
+const PROJECTS = [
   {
-    "source": "framer-motion",
-    "specifiers": [
-      {
-        "type": "named",
-        "imported": "motion",
-        "local": "motion"
-      }
-    ]
+    id: 1,
+    title: "Najd Modern Villa",
+    location: "Riyadh, KSA",
+    category: "Architecture",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1600",
+    description: "Integrating traditional Salmani architecture with contemporary glass-and-steel minimalism."
   },
   {
-    "source": "react-icons/fi",
-    "specifiers": [
-      {
-        "type": "named",
-        "imported": "FiChevronLeft",
-        "local": "FiChevronLeft"
-      },
-      {
-        "type": "named",
-        "imported": "FiChevronRight",
-        "local": "FiChevronRight"
-      }
-    ]
-  }
-]
-04:06:44.313 App.jsx:123 Processed code (first 200 chars): const Carousel = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const images = [
-    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
-    'https://
-04:06:44.537 App.jsx:131 Transpiled code (first 200 chars): const Carousel = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const images = ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop', 'https://images.un
-04:06:44.567 framer-motion.js:1 Uncaught TypeError: Cannot read properties of undefined (reading 'createContext')
-(anonymous) @ framer-motion.js:1
-(anonymous) @ framer-motion.js:1
-(anonymous) @ framer-motion.js:1
-PendingScript
-compileAndRender @ App.jsx:110
-script.onload @ App.jsx:77
-script
-loadBabel @ App.jsx:72
-(anonymous) @ App.jsx:89
-react_stack_bottom_frame @ react-dom-client.development.js:25989
-runWithFiberInDEV @ react-dom-client.development.js:871
-commitHookEffectListMount @ react-dom-client.development.js:13249
-commitHookPassiveMountEffects @ react-dom-client.development.js:13336
-commitPassiveMountOnFiber @ react-dom-client.development.js:15484
-recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:15439
-commitPassiveMountOnFiber @ react-dom-client.development.js:15718
-recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:15439
-commitPassiveMountOnFiber @ react-dom-client.development.js:15519
-flushPassiveEffects @ react-dom-client.development.js:18432
-(anonymous) @ react-dom-client.development.js:17923
-performWorkUntilDeadline @ scheduler.development.js:45
-<App>
-exports.jsxDEV @ react-jsx-dev-runtime.development.js:335
-(anonymous) @ main.jsx:8
-04:06:44.571 App.jsx:119 Parsed imports: [
-  {
-    "source": "framer-motion",
-    "specifiers": [
-      {
-        "type": "named",
-        "imported": "motion",
-        "local": "motion"
-      }
-    ]
+    id: 2,
+    title: "Luxe Majlis Suite",
+    location: "Jeddah, KSA",
+    category: "Interior",
+    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1600",
+    description: "A reimagined hospitality space blending cultural seating heritage with premium marble finishes."
   },
   {
-    "source": "react-icons/fi",
-    "specifiers": [
-      {
-        "type": "named",
-        "imported": "FiChevronLeft",
-        "local": "FiChevronLeft"
-      },
-      {
-        "type": "named",
-        "imported": "FiChevronRight",
-        "local": "FiChevronRight"
-      }
-    ]
+    id: 3,
+    title: "Corporate Oasis Hub",
+    location: "NEOM, KSA",
+    category: "Design",
+    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1600",
+    description: "Biophilic office design focused on sustainability and productivity in extreme climates."
   }
-]
-04:06:44.571 App.jsx:123 Processed code (first 200 chars): const Carousel = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const images = [
-    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
-    'https://
-04:06:44.611 App.jsx:131 Transpiled code (first 200 chars): const Carousel = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const images = ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop', 'https://images.un
-04:06:49.978 react-dom.production.min.js:121 ReferenceError: motion is not defined
-    at eval (eval at init (about:srcdoc:36:31), <anonymous>:8:68)
-    at Array.map (<anonymous>)
-    at Carousel (eval at init (about:srcdoc:36:31), <anonymous>:8:13)
-    at mf (react-dom.production.min.js:105:412)
-    at Qk (react-dom.production.min.js:250:214)
-    at Ri (react-dom.production.min.js:195:185)
-    at Ok (react-dom.production.min.js:195:116)
-    at Nd (react-dom.production.min.js:194:492)
-    at Qf (react-dom.production.min.js:187:439)
-    at Ni (react-dom.production.min.js:185:400)
-wf @ react-dom.production.min.js:121
-c.callback @ react-dom.production.min.js:121
-Hh @ react-dom.production.min.js:103
-Ji @ react-dom.production.min.js:180
-Hi @ react-dom.production.min.js:179
-Hk @ react-dom.production.min.js:178
-Rk @ react-dom.production.min.js:197
-xb @ react-dom.production.min.js:196
-Ni @ react-dom.production.min.js:186
-S @ react.production.min.js:17
-U @ react.production.min.js:21
-04:06:49.980 react-dom.production.min.js:198 Uncaught ReferenceError: motion is not defined
-    at eval (eval at init (about:srcdoc:36:31), <anonymous>:8:68)
-    at Array.map (<anonymous>)
-    at Carousel (eval at init (about:srcdoc:36:31), <anonymous>:8:13)
-    at mf (react-dom.production.min.js:105:412)
-    at Qk (react-dom.production.min.js:250:214)
-    at Ri (react-dom.production.min.js:195:185)
-    at Ok (react-dom.production.min.js:195:116)
-    at Nd (react-dom.production.min.js:194:492)
-    at Qf (react-dom.production.min.js:187:439)
-    at Ni (react-dom.production.min.js:185:400)
-eval @ VM9:8
-Carousel @ VM9:8
-mf @ react-dom.production.min.js:105
-Qk @ react-dom.production.min.js:250
-Ri @ react-dom.production.min.js:195
-Ok @ react-dom.production.min.js:195
-Nd @ react-dom.production.min.js:194
-Qf @ react-dom.production.min.js:187
-Ni @ react-dom.production.min.js:185
-S @ react.production.min.js:17
-U @ react.production.min.js:21
+];
+
+const HeroSlider = () => {
+  const [current, setCurrent] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const nextSlide = useCallback(() => {
+    setCurrent((prev) => (prev === PROJECTS.length - 1 ? 0 : prev + 1));
+  }, []);
+
+  const prevSlide = () => {
+    setCurrent((prev) => (prev === 0 ? PROJECTS.length - 1 : prev - 1));
+  };
+
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  }, [nextSlide, isPaused]);
+
+  return (
+    <div 
+      className="relative h-[70vh] w-full overflow-hidden bg-slate-900 group"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {PROJECTS.map((project, idx) => (
+        <div
+          key={project.id}
+          className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+            idx === current ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
+          } transform duration-[2000ms]`}
+        >
+          <div className="absolute inset-0 bg-black/40 z-10" />
+          <img 
+            src={project.image} 
+            alt={project.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ))}
+
+      <div className="absolute inset-0 z-20 flex flex-col justify-end p-8 md:p-16 lg:p-24">
+        <div className="max-w-3xl overflow-hidden">
+          <p className="text-amber-400 font-medium tracking-[0.2em] uppercase mb-4 translate-y-0 animate-pulse">
+            {PROJECTS[current].category}
+          </p>
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+            {PROJECTS[current].title}
+          </h2>
+          <div className="flex items-center gap-4 text-slate-300 mb-8">
+            <Compass size={20} className="text-amber-400" />
+            <span className="text-lg">{PROJECTS[current].location}</span>
+          </div>
+          <button className="flex items-center gap-2 px-8 py-4 bg-white text-slate-950 font-bold rounded-sm hover:bg-amber-400 transition-colors duration-300">
+            View Project <ArrowUpRight size={20} />
+          </button>
+        </div>
+      </div>
+
+      <div className="absolute bottom-8 right-8 z-30 flex gap-4">
+        <button 
+          onClick={prevSlide}
+          className="p-4 border border-white/20 text-white rounded-full hover:bg-white hover:text-slate-900 transition-all"
+        >
+          <ChevronLeft size={24} />
+        </button>
+        <button 
+          onClick={nextSlide}
+          className="p-4 border border-white/20 text-white rounded-full hover:bg-white hover:text-slate-900 transition-all"
+        >
+          <ChevronRight size={24} />
+        </button>
+      </div>
+
+      <div className="absolute bottom-0 left-0 w-full z-30 flex">
+        {PROJECTS.map((_, idx) => (
+          <div 
+            key={idx} 
+            className="h-1 flex-1 bg-white/20 cursor-pointer"
+            onClick={() => setCurrent(idx)}
+          >
+            <div 
+              className={`h-full bg-amber-400 transition-all duration-300 ${
+                idx === current ? 'w-full' : 'w-0'
+              }`}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ServicesSection = () => {
+  const services = [
+    { title: "Architectural Design", icon: <Home />, desc: "Complete structural concepts from permit to completion." },
+    { title: "Interior Mastery", icon: <Layers />, desc: "Tailored luxury interiors for residential and commercial spaces." },
+    { title: "Smart Solutions", icon: <Maximize2 />, desc: "Integrating AI and smart tech into modern Middle Eastern living." }
+  ];
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8 md:p-16 bg-slate-950">
+      {services.map((s, i) => (
+        <div 
+          key={i} 
+          className="group p-8 border border-slate-800 rounded-xl hover:border-amber-400/50 transition-all duration-500 bg-slate-900/50"
+        >
+          <div className="w-14 h-14 flex items-center justify-center bg-slate-800 rounded-lg text-amber-400 group-hover:bg-amber-400 group-hover:text-slate-900 transition-colors duration-500 mb-6">
+            {React.cloneElement(s.icon, { size: 28 })}
+          </div>
+          <h3 className="text-xl font-bold text-white mb-4">{s.title}</h3>
+          <p className="text-slate-400 leading-relaxed">{s.desc}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <div className="min-h-screen bg-slate-950 font-sans text-slate-200 selection:bg-amber-400 selection:text-slate-900">
+      <nav className="flex items-center justify-between px-8 py-6 border-b border-slate-900 backdrop-blur-md sticky top-0 z-50">
+        <div className="text-2xl font-black tracking-tighter text-white flex items-center gap-2">
+          <div className="w-8 h-8 bg-amber-400 rounded-sm" />
+          MUHAMAD <span className="text-amber-400 text-sm font-normal tracking-widest ml-1">STUDIO</span>
+        </div>
+        <div className="hidden md:flex gap-8 text-sm font-medium uppercase tracking-widest">
+          <a href="#" className="hover:text-amber-400 transition-colors">Portfolios</a>
+          <a href="#" className="hover:text-amber-400 transition-colors">Philosophy</a>
+          <a href="#" className="hover:text-amber-400 transition-colors">Riyadh Office</a>
+        </div>
+        <button className="px-6 py-2 border border-amber-400 text-amber-400 rounded-sm hover:bg-amber-400 hover:text-slate-950 transition-all font-bold text-sm">
+          CONSULTATION
+        </button>
+      </nav>
+
+      <main>
+        <HeroSlider />
+        
+        <div className="max-w-7xl mx-auto py-20 px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div className="max-w-2xl">
+              <h2 className="text-amber-400 text-sm font-bold tracking-[0.3em] uppercase mb-4">Our Services</h2>
+              <p className="text-3xl md:text-5xl font-bold text-white leading-tight">
+                Crafting the future of Arabian living through innovation.
+              </p>
+            </div>
+            <p className="text-slate-400 max-w-sm">
+              From the heart of Riyadh, we deliver architectural excellence that honors tradition while embracing the cutting edge.
+            </p>
+          </div>
+          
+          <ServicesSection />
+        </div>
+
+        <footer className="bg-slate-900 border-t border-slate-800 p-12 text-center">
+          <p className="text-slate-500 text-sm mb-4">2024 Muhamad Architectural Business. All rights reserved.</p>
+          <div className="flex justify-center gap-6">
+            <div className="w-2 h-2 rounded-full bg-amber-400" />
+            <div className="w-2 h-2 rounded-full bg-slate-700" />
+            <div className="w-2 h-2 rounded-full bg-slate-700" />
+          </div>
+        </footer>
+      </main>
+    </div>
+  );
+};
+
+export default App;
