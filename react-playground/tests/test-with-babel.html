@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Babel Transpilation Test</title>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <h1>Babel Transpilation Test</h1>
+  <pre id="results"></pre>
+
+  <script>
+    const results = [];
+    
+    function log(message) {
+      results.push(message);
+      document.getElementById('results').textContent = results.join('\n');
+    }
+
+    function processExports(code) {
+      let processed = code;
+      
+      processed = processed.replace(/export\s+default\s+function\s+(\w+)/g, 'function $1');
+      processed = processed.replace(/export\s+default\s+/g, '');
+      processed = processed.replace(/export\s+/g, '');
+      processed = processed.replace(/\n\s*([A-Z][a-zA-Z0-9]*)\s*;\s*$/g, '');
+      processed = processed.replace(/\n\s*return\s+([A-Z][a-zA-Z0-9]*)\s*;\s*$/g, '');
+      
+      const functionMatch = processed.match(/function\s+([A-Z][a-zA-Z0-9]*)/);
+      const constMatch = processed.match(/const\s+([A-Z][a-zA-Z0-9]*)\s*[:=]/);
+      const componentName = functionMatch?.[1] || constMatch?.[1];
+      
+      if (componentName) {
+        processed = `(function() {\n${processed.trim()}\nreturn ${componentName};\n})()`;
+      }
+      
+      return processed;
+    }
+
+    const testCases = [
+      {
+        name: 'Counter with return statement',
+        code: `function Counter() {
+  const [count, setCount] = React.useState(0);
+  return <div>{count}</div>;
+}
+
+return Counter;`
+      },
+      {
+        name: 'Export default function',
+        code: `export default function App() {
+  return <div>Hello</div>;
+}`
+      },
+      {
+        name: 'Carousel with imports',
+        code: `import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+
+const Carousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  return <div>Carousel {activeIndex}</div>;
+};
+
+export default Carousel;`
+      }
+    ];
+
+    log('Starting Babel transpilation tests...\n');
+
+    testCases.forEach((test, index) => {
+      log(`Test ${index + 1}: ${test.name}`);
+      
+      try {
+        // Strip imports first
+        let cleanCode = test.code.replace(/import\s+.*?\s+from\s+['"].*?['"];?/g, '');
+        
+        // Process exports
+        const processed = processExports(cleanCode);
+        
+        log(`  Processed code length: ${processed.length} chars`);
+        
+        // Try to transpile
+        const transpiled = Babel.transform(processed, {
+          presets: ['react', 'typescript'],
+          filename: 'component.tsx'
+        }).code;
+        
+        log(`  Transpiled successfully: ${transpiled.length} chars`);
+        log(`  Status: PASS\n`);
+        
+      } catch (error) {
+        log(`  Error: ${error.message}`);
+        log(`  Status: FAIL\n`);
+      }
+    });
+
+    log('All tests completed!');
+  </script>
+</body>
+</html>

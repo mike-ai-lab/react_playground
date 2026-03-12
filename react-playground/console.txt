@@ -1,4 +1,31 @@
-03:19:36.465 App.jsx:85 Parsed imports: [
+04:06:44.311 VM79 framer-motion.js:1 Uncaught TypeError: Cannot read properties of undefined (reading 'createContext')
+(anonymous) @ VM79 framer-motion.js:1
+(anonymous) @ VM79 framer-motion.js:1
+(anonymous) @ VM79 framer-motion.js:1
+PendingScript
+compileAndRender @ App.jsx:110
+script.onload @ App.jsx:77
+script
+loadBabel @ App.jsx:72
+(anonymous) @ App.jsx:89
+react_stack_bottom_frame @ react-dom-client.development.js:25989
+runWithFiberInDEV @ react-dom-client.development.js:871
+commitHookEffectListMount @ react-dom-client.development.js:13249
+commitHookPassiveMountEffects @ react-dom-client.development.js:13336
+reconnectPassiveEffects @ react-dom-client.development.js:15832
+recursivelyTraverseReconnectPassiveEffects @ react-dom-client.development.js:15784
+reconnectPassiveEffects @ react-dom-client.development.js:15885
+doubleInvokeEffectsOnFiber @ react-dom-client.development.js:18703
+runWithFiberInDEV @ react-dom-client.development.js:871
+recursivelyTraverseAndDoubleInvokeEffectsInDEV @ react-dom-client.development.js:18667
+commitDoubleInvokeEffectsInDEV @ react-dom-client.development.js:18712
+flushPassiveEffects @ react-dom-client.development.js:18439
+(anonymous) @ react-dom-client.development.js:17923
+performWorkUntilDeadline @ scheduler.development.js:45
+<App>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:335
+(anonymous) @ main.jsx:8
+04:06:44.313 App.jsx:119 Parsed imports: [
   {
     "source": "framer-motion",
     "specifiers": [
@@ -25,9 +52,115 @@
     ]
   }
 ]
-03:19:37.532 about:srcdoc:70 Loaded imports: {motion: Proxy(Object), FiChevronLeft: ƒ, FiChevronRight: ƒ}
-03:19:37.533 about:srcdoc:71 About to decode source code...
-03:19:37.533 about:srcdoc:74 Source code decoded, length: 2682
-03:19:37.534 about:srcdoc:78 Creating function...
-03:19:37.534 about:srcdoc:80 Executing function...
-03:19:37.534 about:srcdoc:82 Component created: function
+04:06:44.313 App.jsx:123 Processed code (first 200 chars): const Carousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const images = [
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
+    'https://
+04:06:44.537 App.jsx:131 Transpiled code (first 200 chars): const Carousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const images = ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop', 'https://images.un
+04:06:44.567 framer-motion.js:1 Uncaught TypeError: Cannot read properties of undefined (reading 'createContext')
+(anonymous) @ framer-motion.js:1
+(anonymous) @ framer-motion.js:1
+(anonymous) @ framer-motion.js:1
+PendingScript
+compileAndRender @ App.jsx:110
+script.onload @ App.jsx:77
+script
+loadBabel @ App.jsx:72
+(anonymous) @ App.jsx:89
+react_stack_bottom_frame @ react-dom-client.development.js:25989
+runWithFiberInDEV @ react-dom-client.development.js:871
+commitHookEffectListMount @ react-dom-client.development.js:13249
+commitHookPassiveMountEffects @ react-dom-client.development.js:13336
+commitPassiveMountOnFiber @ react-dom-client.development.js:15484
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:15439
+commitPassiveMountOnFiber @ react-dom-client.development.js:15718
+recursivelyTraversePassiveMountEffects @ react-dom-client.development.js:15439
+commitPassiveMountOnFiber @ react-dom-client.development.js:15519
+flushPassiveEffects @ react-dom-client.development.js:18432
+(anonymous) @ react-dom-client.development.js:17923
+performWorkUntilDeadline @ scheduler.development.js:45
+<App>
+exports.jsxDEV @ react-jsx-dev-runtime.development.js:335
+(anonymous) @ main.jsx:8
+04:06:44.571 App.jsx:119 Parsed imports: [
+  {
+    "source": "framer-motion",
+    "specifiers": [
+      {
+        "type": "named",
+        "imported": "motion",
+        "local": "motion"
+      }
+    ]
+  },
+  {
+    "source": "react-icons/fi",
+    "specifiers": [
+      {
+        "type": "named",
+        "imported": "FiChevronLeft",
+        "local": "FiChevronLeft"
+      },
+      {
+        "type": "named",
+        "imported": "FiChevronRight",
+        "local": "FiChevronRight"
+      }
+    ]
+  }
+]
+04:06:44.571 App.jsx:123 Processed code (first 200 chars): const Carousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const images = [
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
+    'https://
+04:06:44.611 App.jsx:131 Transpiled code (first 200 chars): const Carousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const images = ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop', 'https://images.un
+04:06:49.978 react-dom.production.min.js:121 ReferenceError: motion is not defined
+    at eval (eval at init (about:srcdoc:36:31), <anonymous>:8:68)
+    at Array.map (<anonymous>)
+    at Carousel (eval at init (about:srcdoc:36:31), <anonymous>:8:13)
+    at mf (react-dom.production.min.js:105:412)
+    at Qk (react-dom.production.min.js:250:214)
+    at Ri (react-dom.production.min.js:195:185)
+    at Ok (react-dom.production.min.js:195:116)
+    at Nd (react-dom.production.min.js:194:492)
+    at Qf (react-dom.production.min.js:187:439)
+    at Ni (react-dom.production.min.js:185:400)
+wf @ react-dom.production.min.js:121
+c.callback @ react-dom.production.min.js:121
+Hh @ react-dom.production.min.js:103
+Ji @ react-dom.production.min.js:180
+Hi @ react-dom.production.min.js:179
+Hk @ react-dom.production.min.js:178
+Rk @ react-dom.production.min.js:197
+xb @ react-dom.production.min.js:196
+Ni @ react-dom.production.min.js:186
+S @ react.production.min.js:17
+U @ react.production.min.js:21
+04:06:49.980 react-dom.production.min.js:198 Uncaught ReferenceError: motion is not defined
+    at eval (eval at init (about:srcdoc:36:31), <anonymous>:8:68)
+    at Array.map (<anonymous>)
+    at Carousel (eval at init (about:srcdoc:36:31), <anonymous>:8:13)
+    at mf (react-dom.production.min.js:105:412)
+    at Qk (react-dom.production.min.js:250:214)
+    at Ri (react-dom.production.min.js:195:185)
+    at Ok (react-dom.production.min.js:195:116)
+    at Nd (react-dom.production.min.js:194:492)
+    at Qf (react-dom.production.min.js:187:439)
+    at Ni (react-dom.production.min.js:185:400)
+eval @ VM9:8
+Carousel @ VM9:8
+mf @ react-dom.production.min.js:105
+Qk @ react-dom.production.min.js:250
+Ri @ react-dom.production.min.js:195
+Ok @ react-dom.production.min.js:195
+Nd @ react-dom.production.min.js:194
+Qf @ react-dom.production.min.js:187
+Ni @ react-dom.production.min.js:185
+S @ react.production.min.js:17
+U @ react.production.min.js:21

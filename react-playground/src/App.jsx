@@ -1,37 +1,55 @@
 import React, { useState, useEffect } from 'react';
 
-const DEFAULT_CODE = `function Counter() {
-  const [count, setCount] = React.useState(0);
-  
+const DEFAULT_CODE = `import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+
+const Carousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const images = [
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=1200&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=1200&h=600&fit=crop'
+  ];
+
   return (
-    <div className="p-8 bg-white rounded-xl shadow-lg max-w-sm mx-auto mt-10">
-      <h1 className="text-3xl font-bold text-blue-600 mb-4">Counter</h1>
-      <div className="text-6xl font-bold text-center mb-6">{count}</div>
-      <div className="flex gap-2">
-        <button 
-          onClick={() => setCount(count - 1)}
-          className="flex-1 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold"
+    <div className="w-full h-screen flex overflow-hidden relative bg-gray-900">
+      {images.map((image, index) => (
+        <motion.div
+          key={index}
+          initial={{ x: index === activeIndex ? 0 : '100%' }}
+          animate={{ x: index === activeIndex ? 0 : '100%' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="absolute top-0 left-0 w-full h-full"
+          style={{ display: index === activeIndex ? 'block' : 'none' }}
         >
-          -
+          <img
+            src={image}
+            alt={\`Image \${index + 1}\`}
+            className="w-full h-full object-cover object-center"
+          />
+        </motion.div>
+      ))}
+      <div className="absolute top-0 left-0 w-full h-full flex justify-between items-center px-8">
+        <button
+          className="bg-white/80 p-4 rounded-full hover:bg-white transition-colors duration-200"
+          onClick={() => setActiveIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length)}
+        >
+          <FiChevronLeft size={32} />
         </button>
-        <button 
-          onClick={() => setCount(0)}
-          className="flex-1 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold"
+        <button
+          className="bg-white/80 p-4 rounded-full hover:bg-white transition-colors duration-200"
+          onClick={() => setActiveIndex((prevIndex) => (prevIndex + 1) % images.length)}
         >
-          Reset
-        </button>
-        <button 
-          onClick={() => setCount(count + 1)}
-          className="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold"
-        >
-          +
+          <FiChevronRight size={32} />
         </button>
       </div>
     </div>
   );
-}
+};
 
-return Counter;`;
+export default Carousel;`;
 
 export default function App() {
   const [code, setCode] = useState(DEFAULT_CODE);
@@ -44,30 +62,34 @@ export default function App() {
 
   // Load Babel on mount
   useEffect(() => {
-    if (window.Babel) {
-      setBabelLoaded(true);
-      compileAndRender(DEFAULT_CODE);
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = 'https://unpkg.com/@babel/standalone/babel.min.js';
-    script.async = true;
-    script.onload = () => {
-      setBabelLoaded(true);
-      compileAndRender(DEFAULT_CODE);
-    };
-    script.onerror = () => setError('Failed to load Babel compiler');
-    document.head.appendChild(script);
-
-    return () => {
-      if (script.parentNode) {
-        document.head.removeChild(script);
+    const loadBabel = async () => {
+      if (window.Babel) {
+        setBabelLoaded(true);
+        await compileAndRender(DEFAULT_CODE);
+        return;
       }
+
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/@babel/standalone/babel.min.js';
+      script.async = true;
+      script.onload = async () => {
+        setBabelLoaded(true);
+        await compileAndRender(DEFAULT_CODE);
+      };
+      script.onerror = () => setError('Failed to load Babel compiler');
+      document.head.appendChild(script);
+
+      return () => {
+        if (script.parentNode) {
+          document.head.removeChild(script);
+        }
+      };
     };
+    
+    loadBabel();
   }, []);
 
-  const compileAndRender = (sourceCode) => {
+  const compileAndRender = async (sourceCode) => {
     setError(null);
     if (!window.Babel) return;
 
@@ -80,24 +102,28 @@ export default function App() {
     };
 
     try {
-      // Step 1: Parse imports and extract dependencies
-      const { cleanCode, imports } = parseImports(sourceCode);
-      console.log('Parsed imports:', JSON.stringify(imports, null, 2));
+      // Parse imports and generate mocks
+      const { cleanCode, mocks } = parseImports(sourceCode);
       
-      // Step 2: Handle exports
+      // Process exports
       const processedCode = processExports(cleanCode);
       
-      // Step 3: Wrap in IIFE before transpilation
-      const wrappedCode = `(function() {\n${processedCode}\n})()`;
+      // Wrap code with React and mocks INSIDE the IIFE
+      const wrappedCode = `(function() { 
+        const React = window.React;
+        const { useState, useEffect, useRef, useMemo, useCallback, useReducer, useContext, createContext } = React;
+        ${mocks}
+        ${processedCode}
+      })()`;
       
-      // Step 4: Transpile with TypeScript support
+      // Transpile
       const transpiledCode = window.Babel.transform(wrappedCode, {
         presets: ['react', 'typescript'],
         filename: 'component.tsx'
       }).code;
 
-      // Step 5: Generate bundled HTML with dynamic imports
-      const html = generatePreviewHTML(transpiledCode, imports);
+      // Generate preview HTML
+      const html = generatePreviewHTML(transpiledCode);
       setPreviewHTML(html);
       setRunKey(prev => prev + 1);
       logEntry.success = true;
@@ -121,40 +147,19 @@ export default function App() {
       if (line.startsWith('import ')) {
         inImportBlock = true;
         
-        // Parse import statement
-        const match = line.match(/import\s+(?:(\w+)|(?:\{([^}]+)\})|(\*\s+as\s+\w+))\s+from\s+['"]([^'"]+)['"]/);
+        const match = line.match(/import\s+(?:(\w+)|(?:\{([^}]+)\}))\s+from\s+['"]([^'"]+)['"]/);
         if (match) {
           const defaultImport = match[1];
           const namedImports = match[2];
-          const namespaceImport = match[3];
-          let source = match[4];
+          const source = match[3];
           
-          // Fix common mismatches: FiXxx icons are from react-icons/fi, not lucide-react
-          if (namedImports && (namedImports.includes('Fi') || namedImports.startsWith('Fi')) && source === 'lucide-react') {
-            source = 'react-icons/fi';
-          }
-          
-          const importInfo = { source, specifiers: [] };
-          
-          if (defaultImport) {
-            importInfo.specifiers.push({ type: 'default', name: defaultImport });
-          }
+          if (defaultImport) imports.push({ name: defaultImport, source });
           if (namedImports) {
             namedImports.split(',').forEach(spec => {
-              const parts = spec.trim().split(/\s+as\s+/);
-              const imported = parts[0].trim();
-              const local = parts[1] ? parts[1].trim() : imported;
-              importInfo.specifiers.push({ type: 'named', imported, local });
+              const cleaned = spec.trim().split(/\s+as\s+/).pop().trim();
+              if (cleaned) imports.push({ name: cleaned, source });
             });
           }
-          if (namespaceImport) {
-            const nsMatch = namespaceImport.match(/\*\s+as\s+(\w+)/);
-            if (nsMatch) {
-              importInfo.specifiers.push({ type: 'namespace', name: nsMatch[1] });
-            }
-          }
-          
-          imports.push(importInfo);
         }
         
         if (line.includes(';') || (line.includes('from') && line.match(/['"]/) && line.match(/['"]/).length >= 2)) {
@@ -171,70 +176,48 @@ export default function App() {
       cleanLines.push(lines[i]);
     }
 
-    return { cleanCode: cleanLines.join('\n'), imports };
+    // Generate mocks
+    const mocks = imports.map(imp => {
+      if (imp.name === 'FiChevronLeft') {
+        return `const FiChevronLeft = (props) => React.createElement('svg', { width: props.size || 24, height: props.size || 24, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', ...props }, React.createElement('polyline', { points: '15 18 9 12 15 6' }));`;
+      }
+      if (imp.name === 'FiChevronRight') {
+        return `const FiChevronRight = (props) => React.createElement('svg', { width: props.size || 24, height: props.size || 24, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round', ...props }, React.createElement('polyline', { points: '9 18 15 12 9 6' }));`;
+      }
+      if (imp.source.includes('lucide') || imp.source.includes('react-icons') || imp.source.includes('fi')) {
+        return `const ${imp.name} = (props) => React.createElement('svg', { width: props.size || 24, height: props.size || 24, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, ...props }, React.createElement('circle', { cx: 12, cy: 12, r: 10 }));`;
+      }
+      if (imp.source.includes('framer-motion')) {
+        return `const motion = { div: (props) => React.createElement('div', props), span: (props) => React.createElement('span', props), img: (props) => React.createElement('img', props), button: (props) => React.createElement('button', props) };`;
+      }
+      return '';
+    }).filter(Boolean).join('\n        ');
+
+    return { cleanCode: cleanLines.join('\n'), mocks };
   };
 
   const processExports = (code) => {
     let processed = code;
     
-    // Remove all export statements first
-    processed = processed.replace(/export\s+default\s+function\s+(\w+)/g, 'function $1');
+    // Find component name in "export default Name"
+    const exportDefaultMatch = processed.match(/export\s+default\s+([A-Z][a-zA-Z0-9]*)/);
+    const componentName = exportDefaultMatch ? exportDefaultMatch[1] : null;
+    
+    // Remove export keywords
     processed = processed.replace(/export\s+default\s+/g, '');
     processed = processed.replace(/export\s+/g, '');
     
-    // Remove any standalone component name at the end (like "App;" or "Component;")
-    processed = processed.replace(/\n\s*([A-Z][a-zA-Z0-9]*)\s*;\s*$/g, '');
-    
-    // Find the main component function or const name
-    const functionMatch = processed.match(/function\s+([A-Z][a-zA-Z0-9]*)/);
-    const constMatch = processed.match(/const\s+([A-Z][a-zA-Z0-9]*)\s*[:=]/);
-    const componentName = functionMatch?.[1] || constMatch?.[1];
-    
-    // Always add return statement if we found a component
+    // Ensure IIFE returns the component
     if (componentName) {
-      const returnStatement = `return ${componentName};`;
-      // Only add if not already present
-      if (!processed.includes(returnStatement)) {
-        processed = processed.trim() + `\n\n${returnStatement}`;
-      }
+      processed = processed.replace(new RegExp(`return\\s+${componentName};?`, 'g'), '');
+      processed += `\nreturn ${componentName};`;
     }
     
-    return processed;
+    return processed.trim();
   };
 
-  const generatePreviewHTML = (transpiledCode, imports) => {
-    const externalImports = imports.filter(imp => 
-      imp.source !== 'react' && 
-      imp.source !== 'react-dom' &&
-      !imp.source.startsWith('.') &&
-      !imp.source.startsWith('/')
-    );
-
-    const allImportedNames = externalImports.flatMap(imp => 
-      imp.specifiers.map(spec => spec.local || spec.name)
-    );
-
-    const hasFramerMotion = externalImports.some(imp => imp.source.includes('framer-motion'));
-    const hasIcons = externalImports.some(imp => imp.source.includes('icon') || imp.source.includes('lucide'));
-
-    const iconMappings = externalImports
-      .filter(imp => imp.source.includes('icon') || imp.source.includes('lucide'))
-      .flatMap(imp => imp.specifiers.map(spec => {
-        const iconName = spec.local || spec.name;
-        const lucideName = iconName.replace(/^Fi/, '').replace(/^Lu/, '').replace(/^Hi/, '').replace(/^Bi/, '');
-        return `const ${iconName} = (props) => React.createElement('svg', { width: 24, height: 24, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2, ...props }, React.createElement('circle', { cx: 12, cy: 12, r: 10 }));`;
-      }))
-      .join('\n          ');
-
-    const motionMappings = hasFramerMotion ? `
-          const motion = new Proxy({}, {
-            get: () => ({ children, ...props }) => React.createElement('div', props, children)
-          });
-          const AnimatePresence = ({ children }) => children;` : '';
-
+  const generatePreviewHTML = (transpiledCode) => {
     const encoded = encodeURIComponent(transpiledCode);
-    const importNamesParam = allImportedNames.length > 0 ? ', ' + allImportedNames.map(n => `'${n}'`).join(', ') : '';
-    const importNamesArgs = allImportedNames.length > 0 ? ', ' + allImportedNames.join(', ') : '';
     
     return `<!DOCTYPE html>
 <html>
@@ -245,7 +228,7 @@ export default function App() {
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { margin: 0; padding: 0; }
+    body { margin: 0; padding: 0; background: #f8fafc; }
     #root { min-height: 100vh; }
     .error-overlay {
       position: fixed;
@@ -274,85 +257,39 @@ export default function App() {
 </head>
 <body>
   <div id="root"></div>
-  <script type="module">
+  <script>
     (function() {
-      let hasError = false;
-      
-      function showError(title, message) {
-        if (hasError) return;
-        hasError = true;
+      try {
+        const React = window.React;
+        const source = decodeURIComponent("${encoded}");
+        
+        // Execute the transpiled IIFE which returns the Component
+        const Component = eval(source);
+        
+        if (typeof Component !== 'function') {
+          throw new Error('Code evaluation did not return a component function.');
+        }
+
+        const root = window.ReactDOM.createRoot(document.getElementById('root'));
+        root.render(React.createElement(Component));
+      } catch (e) {
         const overlay = document.createElement('div');
         overlay.className = 'error-overlay';
-        overlay.innerHTML = '<div class="error-title">' + title + '</div><div class="error-content">' + String(message).replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+        overlay.innerHTML = '<div class="error-title">Preview Error</div><div class="error-content">' + e.message + '</div>';
         document.body.appendChild(overlay);
       }
-      
-      function init() {
-        try {
-          if (!window.React || !window.ReactDOM) {
-            throw new Error('React libraries not loaded');
-          }
-          
-          const React = window.React;
-          const ReactDOM = window.ReactDOM;
-          const { useState, useEffect, useRef, useCallback, useMemo, useReducer, useContext, createContext, memo, createElement, Fragment } = React;
-          
-          ${iconMappings}
-          ${motionMappings}
-          
-          console.log('Loaded imports:', {${allImportedNames.join(', ')}});
-          console.log('About to decode source code...');
-          
-          const sourceCode = decodeURIComponent("${encoded}");
-          console.log('Source code decoded, length:', sourceCode.length);
-          
-          let Component;
-          try {
-            console.log('Creating function...');
-            const evalFunc = new Function('React', 'ReactDOM', 'createElement', 'Fragment', 'useState', 'useEffect', 'useRef', 'useCallback', 'useMemo', 'useReducer', 'useContext', 'createContext', 'memo'${importNamesParam}, 'return ' + sourceCode);
-            console.log('Executing function...');
-            Component = evalFunc(React, ReactDOM, createElement, Fragment, useState, useEffect, useRef, useCallback, useMemo, useReducer, useContext, createContext, memo${importNamesArgs});
-            console.log('Component created:', typeof Component);
-          } catch (e) {
-            console.error('Function execution error:', e);
-            throw new Error('Execution failed: ' + e.message);
-          }
-          
-          if (!Component || typeof Component !== 'function') {
-            throw new Error('No valid component found. Code returned: ' + typeof Component);
-          }
-          
-          const root = ReactDOM.createRoot(document.getElementById('root'));
-          root.render(createElement(Component));
-        } catch (error) {
-          console.error('Init error:', error);
-          showError('Component Error', error.message + '\\n\\n' + (error.stack || ''));
-        }
-      }
-      
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-      } else {
-        init();
-      }
-      
-      window.addEventListener('error', function(event) {
-        if (!hasError) {
-          showError('Runtime Error', event.message);
-        }
-      });
     })();
   </script>
 </body>
 </html>`;
   };
 
-  const handleRunClick = () => {
+  const handleRunClick = async () => {
     if (!babelLoaded) {
       setError('Compiler still loading');
       return;
     }
-    compileAndRender(code);
+    await compileAndRender(code);
   };
 
   const handleKeyDown = (e) => {

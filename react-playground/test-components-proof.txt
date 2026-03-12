@@ -287,6 +287,80 @@ function AdvancedHooks() {
 export default AdvancedHooks;
 
 
+========== TEST 4: Advanced Hooks and Effects ==========
+
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FiChevronLeft, FiChevronRight } from 'lucide-react';
+
+const Carousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const images = [
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=1200&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=1200&h=600&fit=crop'
+  ];
+
+  const handleDragStart = (e, index) => {
+    e.preventDefault();
+  };
+
+  const handleDragEnd = (e, index) => {
+    e.preventDefault();
+    const rect = e.target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if (x < rect.width / 2) {
+      setActiveIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    } else {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }
+  };
+
+  return (
+    <div className="w-full h-full flex overflow-hidden relative">
+      {images.map((image, index) => (
+        <motion.div
+          key={index}
+          initial={{ x: index === activeIndex ? 0 : '100%' }}
+          animate={{ x: index === activeIndex ? 0 : '100%' }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className={`absolute top-0 left-0 w-full h-full transition-transform duration-500 ease-out ${
+            index === activeIndex ? 'block' : 'hidden'
+          }`}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+          dragElastic={0.1}
+          onDragStart={(e) => handleDragStart(e, index)}
+          onDragEnd={(e) => handleDragEnd(e, index)}
+        >
+          <img
+            src={image}
+            alt={`Image ${index + 1}`}
+            className="w-full h-full object-cover object-center"
+          />
+        </motion.div>
+      ))}
+      <div className="absolute top-0 left-0 w-full h-full flex justify-between items-center">
+        <button
+          className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+          onClick={() => setActiveIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length)}
+        >
+          <FiChevronLeft size={24} />
+        </button>
+        <button
+          className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+          onClick={() => setActiveIndex((prevIndex) => (prevIndex + 1) % images.length)}
+        >
+          <FiChevronRight size={24} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Carousel;
+
 ========================================
 END OF PROOF TESTS
 ========================================

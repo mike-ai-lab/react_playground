@@ -1,0 +1,155 @@
+MANUAL TEST STEPS - Follow these to verify the fix
+========================================
+
+SETUP:
+1. Open http://localhost:5174/ in your browser
+2. Open browser DevTools (F12)
+3. Go to Console tab
+
+TEST 1: Counter Component (Simple)
+========================================
+1. Clear the editor
+2. Paste this code:
+
+function Counter() {
+  const [count, setCount] = React.useState(0);
+  
+  return (
+    <div className="p-8 bg-white rounded-xl shadow-lg max-w-sm mx-auto mt-10">
+      <h1 className="text-3xl font-bold text-blue-600 mb-4">Counter</h1>
+      <div className="text-6xl font-bold text-center mb-6">{count}</div>
+      <div className="flex gap-2">
+        <button 
+          onClick={() => setCount(count - 1)}
+          className="flex-1 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold"
+        >
+          -
+        </button>
+        <button 
+          onClick={() => setCount(0)}
+          className="flex-1 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-semibold"
+        >
+          Reset
+        </button>
+        <button 
+          onClick={() => setCount(count + 1)}
+          className="flex-1 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg font-semibold"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+}
+
+return Counter;
+
+3. Click "Run Code"
+4. EXPECTED: Counter component renders with 3 buttons
+5. EXPECTED: Console shows "SUCCESS"
+6. EXPECTED: No errors in browser console
+7. Test the buttons work (click +, -, Reset)
+
+TEST 2: Carousel with Framer Motion
+========================================
+1. Clear the editor
+2. Paste this code:
+
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FiChevronLeft, FiChevronRight } from 'lucide-react';
+
+const Carousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const colors = ['bg-blue-500', 'bg-red-500', 'bg-green-500'];
+
+  return (
+    <div className="w-full h-screen flex overflow-hidden relative">
+      {colors.map((color, index) => (
+        <motion.div
+          key={index}
+          initial={{ x: index === activeIndex ? 0 : '100%' }}
+          animate={{ x: index === activeIndex ? 0 : '100%' }}
+          transition={{ duration: 0.5 }}
+          className={`absolute top-0 left-0 w-full h-full ${color} flex items-center justify-center text-white text-6xl font-bold`}
+          style={{ display: index === activeIndex ? 'flex' : 'none' }}
+        >
+          Slide {index + 1}
+        </motion.div>
+      ))}
+      <div className="absolute top-0 left-0 w-full h-full flex justify-between items-center px-8">
+        <button
+          className="bg-white/80 p-4 rounded-full hover:bg-white"
+          onClick={() => setActiveIndex((prev) => (prev - 1 + colors.length) % colors.length)}
+        >
+          <FiChevronLeft size={32} />
+        </button>
+        <button
+          className="bg-white/80 p-4 rounded-full hover:bg-white"
+          onClick={() => setActiveIndex((prev) => (prev + 1) % colors.length)}
+        >
+          <FiChevronRight size={32} />
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Carousel;
+
+3. Click "Run Code"
+4. EXPECTED: Carousel renders with colored slides
+5. EXPECTED: Console shows "SUCCESS"
+6. EXPECTED: No errors in browser console
+7. EXPECTED: Browser console shows "Loaded imports: {FiChevronLeft, FiChevronRight}"
+8. Test navigation buttons work (left/right arrows)
+
+TEST 3: TypeScript Component
+========================================
+1. Clear the editor
+2. Paste this code:
+
+function TypeScriptDemo() {
+  const [count, setCount] = React.useState(0);
+  
+  const increment = (amount) => {
+    setCount(count + amount);
+  };
+  
+  return (
+    <div className="p-8 bg-gradient-to-br from-purple-500 to-pink-500 min-h-screen flex items-center justify-center">
+      <div className="bg-white p-8 rounded-2xl shadow-2xl">
+        <h1 className="text-3xl font-bold text-gray-800 mb-4">TypeScript Works</h1>
+        <div className="text-6xl font-bold text-center mb-6 text-purple-600">{count}</div>
+        <div className="flex gap-2">
+          <button 
+            onClick={() => increment(1)}
+            className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold"
+          >
+            +1
+          </button>
+          <button 
+            onClick={() => increment(5)}
+            className="px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white rounded-lg font-semibold"
+          >
+            +5
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+3. Click "Run Code"
+4. EXPECTED: Component renders with gradient background
+5. EXPECTED: Console shows "SUCCESS"
+6. EXPECTED: No errors in browser console
+7. Test both buttons work
+
+RESULTS:
+========================================
+Test 1 (Counter): [ ] PASS [ ] FAIL
+Test 2 (Carousel): [ ] PASS [ ] FAIL
+Test 3 (TypeScript): [ ] PASS [ ] FAIL
+
+If all 3 tests PASS, the fix is working correctly.

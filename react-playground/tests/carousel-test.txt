@@ -1,0 +1,40 @@
+03:54:09.281 App.jsx:101 Parsed imports: []
+03:54:09.282 App.jsx:105 Processed code (first 200 chars): (function() {
+function Counter() {
+  const [count, setCount] = React.useState(0);
+  
+  return (
+    <div className="p-8 bg-white rounded-xl shadow-lg max-w-sm mx-auto mt-10">
+      <h1 className="text
+03:54:09.362 App.jsx:113 Transpiled code (first 200 chars): (function () {
+  function Counter() {
+    const [count, setCount] = React.useState(0);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "p-8 bg-white rounded-xl shadow-lg max-w-sm
+03:54:09.766 App.jsx:101 Parsed imports: []
+03:54:09.766 App.jsx:105 Processed code (first 200 chars): (function() {
+function Counter() {
+  const [count, setCount] = React.useState(0);
+  
+  return (
+    <div className="p-8 bg-white rounded-xl shadow-lg max-w-sm mx-auto mt-10">
+      <h1 className="text
+03:54:09.864 App.jsx:113 Transpiled code (first 200 chars): (function () {
+  function Counter() {
+    const [count, setCount] = React.useState(0);
+    return /*#__PURE__*/React.createElement("div", {
+      className: "p-8 bg-white rounded-xl shadow-lg max-w-sm
+03:54:21.919 about:srcdoc:82 Loaded imports: {}
+03:54:21.919 about:srcdoc:83 About to decode source code...
+03:54:21.919 about:srcdoc:86 Source code decoded, length: 1147
+03:54:21.920 about:srcdoc:90 Creating function...
+03:54:21.920 about:srcdoc:92 Executing function...
+03:54:21.920 about:srcdoc:94 Component created: undefined
+03:54:21.920 about:srcdoc:95 Component value: undefined
+03:54:21.920 about:srcdoc:108 Init error: Error: No valid component found. Code returned: undefined
+    at init (about:srcdoc:102:19)
+    at about:srcdoc:116:9
+    at about:srcdoc:124:7
+init @ about:srcdoc:108
+(anonymous) @ about:srcdoc:116
+(anonymous) @ about:srcdoc:124
