@@ -860,7 +860,9 @@ export default function App() {
     const blob = new Blob([previewHTML], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     iframeRef.current.src = url;
-    return () => URL.revokeObjectURL(url);
+    // Revoke after a delay to allow the iframe to fully load
+    const timer = setTimeout(() => URL.revokeObjectURL(url), 10000);
+    return () => clearTimeout(timer);
   }, [previewHTML, runKey]);
 
   // Validate all templates on mount and when templates change
@@ -899,7 +901,34 @@ export default function App() {
     validateAllTemplates();
   }, [templates, babelLoaded]);
 
-  // Detect whether source code is HTML or React/JSX  const detectCodeType = (sourceCode) => {
+  // Resizable split pane drag handlers
+  const handleDividerMouseDown = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const onMouseMove = (e) => {
+      if (!splitContainerRef.current) return;
+      const rect = splitContainerRef.current.getBoundingClientRect();
+      const newPos = ((e.clientX - rect.left) / rect.width) * 100;
+      setSplitPos(Math.min(Math.max(newPos, 20), 80));
+    };
+
+    const onMouseUp = () => setIsDragging(false);
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+  }, [isDragging]);
+
+  // Detect whether source code is HTML or React/JSX
+  const detectCodeType = (sourceCode) => {
     const trimmed = sourceCode.trim();
 
     // Definitive HTML signals
@@ -1558,8 +1587,8 @@ export default function App() {
           </div>
         </header>
 
-      <main className="flex flex-1 overflow-hidden">
-        <div className="w-1/2 flex flex-col border-r border-slate-700/50 bg-[#1e1e1e]">
+      <main className="flex flex-1 overflow-hidden" ref={splitContainerRef} style={{ cursor: isDragging ? 'col-resize' : 'default' }}>
+        <div style={{ width: previewMaximized ? '0%' : `${splitPos}%`, display: previewMaximized ? 'none' : 'flex' }} className="flex flex-col border-r border-slate-700/50 bg-[#1e1e1e] overflow-hidden">
           <div className="flex items-center justify-between px-3 py-1.5 border-b border-slate-800/50 bg-[#1e1e1e]">
             <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Editor {!monacoLoaded && '(Loading...)'}</span>
             <div className="flex items-center gap-1">
@@ -1760,7 +1789,16 @@ export default function App() {
           </div>
         </div>
 
-        <div className="w-1/2 relative bg-slate-50 flex flex-col">
+        {/* Resizable divider */}
+        {!previewMaximized && (
+          <div
+            onMouseDown={handleDividerMouseDown}
+            className="w-1 bg-slate-700/50 hover:bg-blue-500 active:bg-blue-400 cursor-col-resize flex-shrink-0 transition-colors"
+            title="Drag to resize"
+          />
+        )}
+
+        <div style={{ width: previewMaximized ? '100%' : `${100 - splitPos}%` }} className="relative bg-slate-50 flex flex-col overflow-hidden">
           <div className="flex items-center justify-between px-3 py-1.5 border-b border-slate-200 bg-white z-10 shadow-sm">
             <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Preview</span>
             <div className="flex items-center gap-2">
@@ -1775,6 +1813,21 @@ export default function App() {
                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
                 <span>Live</span>
               </div>
+              <button
+                onClick={() => setPreviewMaximized(v => !v)}
+                className="ml-1 p-1 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+                title={previewMaximized ? 'Restore split view' : 'Maximize preview'}
+              >
+                {previewMaximized ? (
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+                  </svg>
+                ) : (
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                  </svg>
+                )}
+              </button>
             </div>
           </div>
           
@@ -1798,10 +1851,10 @@ export default function App() {
             )}
 
             <iframe
-              key={runKey}
               ref={iframeRef}
               className="w-full h-full border-none bg-white"
               title="Preview"
+              style={{ pointerEvents: isDragging ? 'none' : 'auto' }}
             />
           </div>
         </div>
