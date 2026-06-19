@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Code Fix Pro V3 - Modern Interface</title>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script><script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script><script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js"></script>
+<link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+<div class="app-container">
+  <div class="header">
+    <h1>AI Code Fix Pro</h1>
+    <div class="header-controls">
+      <span id="status-badge" class="status-badge success">Ready</span>
+      <button id="detect-errors-btn">Detect Errors</button>
+      <button id="fix-btn" disabled>AI Fix</button><button class="secondary" id="render-preview-btn">Render Preview</button>
+      <button class="secondary" id="toggle-preview">Show Preview</button><button class="secondary" id="toggle-chat">
+        <span id="chat-toggle-text">Hide Chat</span>
+      </button>
+      <button class="secondary" id="debug-log-btn" title="Debug Log">📋 Debug</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="editor-panel">
+      <div class="panel-header">
+        Code Editor
+        <div>
+          <label style="font-size: 12px; font-weight: normal; cursor: pointer;">
+            <input type="checkbox" id="auto-fix-toggle" checked style="margin-right: 6px;">
+            Auto-fix common issues
+          </label>
+        </div>
+      </div>
+
+      <div class="code-editor-container">
+        <div class="editor-toolbar">
+          <div class="toolbar-left">
+            <button class="icon-btn" id="undo-btn" disabled title="Undo">↶</button>
+            <button class="icon-btn" id="redo-btn" disabled title="Redo">↷</button>
+            <span style="font-size: 12px; color: #666; margin-left: 8px;" id="history-info">No history</span>
+          </div>
+          <div class="toolbar-right">
+            <button class="icon-btn" id="copy-code-btn" title="Copy">📋</button>
+            <button class="icon-btn" id="clear-code-btn" title="Clear">🗑️</button>
+          </div>
+        </div>
+
+        <div class="code-editor">
+          <div class="line-numbers" id="line-numbers"></div>
+          <textarea id="code-editor"></textarea>
+        </div>
+
+        <div class="diff-overlay" id="diff-overlay">
+          <div class="diff-header">
+            <h3>AI Suggested Changes</h3>
+            <div class="diff-actions">
+              <button id="reject-fix-btn" class="danger">✕ Reject</button>
+              <button id="accept-fix-btn" class="success">✓ Accept</button>
+            </div>
+          </div>
+          <div class="diff-content" id="diff-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-panel" id="chat-panel">
+      <div class="panel-header">
+        AI Assistant
+        <button class="icon-btn" id="clear-chat-btn" title="Clear chat">🗑️</button>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="message ai">
+          <div class="message-bubble">
+            Hi! Paste your code and click "Detect Errors" to get started.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="debug-panel collapsed" id="debug-panel">
+    <div class="debug-header" id="debug-header">
+      <h3>Console</h3>
+      <div class="debug-controls" id="debug-controls">
+        <button id="clear-console-btn" class="secondary">Clear</button>
+      </div>
+    </div>
+    <div class="debug-log" id="console-log"></div>
+  </div>
+</div>
+
+<!-- Floating Debug Log Window -->
+<div class="debug-window" id="debug-window">
+  <div class="debug-window-header">
+    <h3>Debug Log</h3>
+    <div class="debug-window-controls">
+      <button id="copy-debug-btn" class="secondary">📋</button>
+      <button id="clear-debug-btn" class="secondary">Clear</button>
+      <button id="close-debug-btn" class="secondary">✕</button>
+    </div>
+  </div>
+  <div class="debug-window-content" id="debug-log"></div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
+
+
+
+
+
